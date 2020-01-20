@@ -48,7 +48,7 @@
                         <a class="nav-link js-scroll" href="@Url.Action("Index", "BlogPosts")">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link js-scroll" href="#">About</a>
+                        <a class="nav-link js-scroll" href="@Url.Action("About","Home")">About</a>
                     </li>
                     @*<li class="nav-item">
                         <a class="nav-link js-scroll" href="#">Services</a>
@@ -60,7 +60,7 @@
                         <a class="nav-link js-scroll" href="#">Portfolio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link js-scroll" href="#">Contact</a>
+                        <a class="nav-link js-scroll" href="@Url.Action("Contact", "Home")">Contact</a>
                     </li>
                     @Html.Partial("_LoginPartial")
                 </ul>

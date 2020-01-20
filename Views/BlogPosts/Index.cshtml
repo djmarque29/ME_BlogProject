@@ -4,62 +4,65 @@
 
 <!--/ Section Blog Star /-->
 
-<div class="row">
-    <div class="container">
-        <p></p>
-        @*<div class="btn btn-primary">Create Blog Post</div>*@
-        <a href="@Url.Action("Create", "BlogPosts")"><div class="btn btn-primary">Create Blog Post</div></a>
+@if (User.IsInRole("Admin"))
+{
+    <div class="row">
+        <div class="container">
+            <p></p>
+            @*<div class="btn btn-primary">Create Blog Post</div>*@
+            <a href="@Url.Action("Create", "BlogPosts")"><div class="btn btn-primary">Create Blog Post</div></a>
+        </div>
     </div>
-</div>
+}
 
 <section id="blog" class="blog-mf sect-pt4 route">
     <div class="container">
         @*<div class="row">
-            <div class="col-sm-12">
-                <div class="title-box text-center">
-                    <h3 class="title-a">
-                        Blog
-                    </h3>
-                    <p class="subtitle-a">
-                        See my journey at Coder Foundry.
-                    </p>
-                    <div class="line-mf"></div>
+                <div class="col-sm-12">
+                    <div class="title-box text-center">
+                        <h3 class="title-a">
+                            Blog
+                        </h3>
+                        <p class="subtitle-a">
+                            See my journey at Coder Foundry.
+                        </p>
+                        <div class="line-mf"></div>
+                    </div>
                 </div>
-            </div>
-        </div>*@
-            <!--/ Blog 1 /-->
-            <div class="row">
-        @foreach (var item in Model)
-        {
-                    <div class="col-md-4">
-                        <div class="card card-blog">
-                            <div class="card-img">
-                                <a href="@Url.Action("Details", "BlogPosts",new { Slug = item.Slug })"> <img src="@item.MediaUrl" alt="" class="img-fluid"></a>
-                            </div>
-                            <div class="card-body">
-                                @*<div class="card-category-box">
+            </div>*@
+        <!--/ Blog 1 /-->
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card card-blog">
+                        <div class="card-img">
+                            <a href="@Url.Action("Details", "BlogPosts",new { Slug = item.Slug })"> <img src="@item.MediaUrl" alt="" class="img-fluid"></a>
+                        </div>
+                        <div class="card-body">
+                            @*<div class="card-category-box">
                                     <div class="card-category">
                                         <h6 class="category">Travel</h6>
                                     </div>
                                 </div>*@
-                                <h3 class="card-title"><a href="@Url.Action("Details", "BlogPosts",new { Slug = item.Slug })">@item.Title</a></h3>
-                                <p class="card-description">@Html.Raw(item.Body) </p>
+                            <h3 class="card-title"><a href="@Url.Action("Details", "BlogPosts",new { Slug = item.Slug })">@item.Title</a></h3>
+                            <p class="card-description">@Html.Raw(item.Body) </p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="post-author">
+                                <a href="#">
+                                    <img src="~/Template/img/testimonial-2.jpg" alt="" class="avatar rounded-circle">
+                                    <span class="author">@User.Identity.GetUserId()</span>
+                                </a>
                             </div>
-                            <div class="card-footer">
-                                <div class="post-author">
-                                    <a href="#">
-                                        <img src="~/Template/img/testimonial-2.jpg" alt="" class="avatar rounded-circle">
-                                        <span class="author">@User.Identity.GetUserId()</span>
-                                    </a>
-                                </div>
-                                <div class="post-date">
-                                    <span class="ion-ios-clock-outline">@item.Created.ToString("MM/dd/yy")</span> 
-                                </div>
+                            <div class="post-date">
+                                <span class="ion-ios-clock-outline">@item.Created.ToString("MM/dd/yy")</span>
                             </div>
                         </div>
                     </div>
-        }
-            </div>
+                </div>
+            }
+        </div>
         <!--/ Blog 2/-->
         @*<div class="col-md-4">
                 <div class="card card-blog">

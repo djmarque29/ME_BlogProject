@@ -41,6 +41,15 @@
                                 consectetur adipiscing elit. Donec sollicitudin molestie malesuada.
                             </p>*@
                     </div>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="row">
+                            <div class="col-md-8">
+                                <a href="@Url.Action("Edit", "BlogPosts", new {@Model.Id})"><div class="btn btn-primary">Edit</div></a>
+                                <a href="@Url.Action("Delete", "BlogPosts", new { @Model.Id })"><div class="btn btn-primary">Delete</div></a>
+                            </div>
+                        </div>
+                    }
                 </div>
                 <div class="box-comments">
                     <div class="title-box-2">
