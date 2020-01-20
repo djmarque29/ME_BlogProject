@@ -343,12 +343,14 @@
     <Content Include="Template\css\style-red.css" />
     <Content Include="Template\css\style-sky-blue.css" />
     <Content Include="Template\css\style.css" />
+    <Content Include="Template\img\645x344-turkish-craftsman-keeps-alive-600-year-old-art-of-traditional-japanese-woodworking-in-turkey-1568197548782.jpg" />
     <Content Include="Template\img\apple-touch-icon.png" />
     <Content Include="Template\img\brown-and-black-bridge-2350074.jpg" />
     <Content Include="Template\img\counters-bg.jpg" />
     <Content Include="Template\img\favicon.png" />
     <Content Include="Template\img\intro-bg - Copy.jpg" />
     <Content Include="Template\img\intro-bg.jpg" />
+    <Content Include="Template\img\kumiko1.jpg" />
     <Content Include="Template\img\overlay-bg.jpg" />
     <Content Include="Template\img\post-1.jpg" />
     <Content Include="Template\img\post-2.jpg" />

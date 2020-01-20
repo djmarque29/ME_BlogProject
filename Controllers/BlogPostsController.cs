@@ -35,6 +35,7 @@ namespace ME_BlogProject.Controllers
             }
             return View(blogPost);
         }
+
         [Authorize(Roles = "Admin")]
         // GET: BlogPosts/Create
         public ActionResult Create()
@@ -72,6 +73,9 @@ namespace ME_BlogProject.Controllers
         }
 
         //GET: Blog Posts/Edit
+
+        [Authorize(Roles = "Admin")]
+
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -104,6 +108,8 @@ namespace ME_BlogProject.Controllers
         }
 
         // GET: BlogPosts/Delete/5
+
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
