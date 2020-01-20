@@ -35,7 +35,7 @@ namespace ME_BlogProject.Controllers
             }
             return View(blogPost);
         }
-
+        [Authorize(Roles = "Admin")]
         // GET: BlogPosts/Create
         public ActionResult Create()
         {
@@ -70,6 +70,22 @@ namespace ME_BlogProject.Controllers
             }
             return View(blogPost);
         }
+
+        //GET: Blog Posts/Edit
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            BlogPost blogpost = db.Posts.Find(id);
+            if (blogpost == null)
+            {
+                return HttpNotFound();
+            }
+            return View(blogpost);
+        }
+
 
         // POST: BlogPosts/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 

@@ -57,19 +57,19 @@ namespace ME_BlogProject.Migrations
             userManager.AddToRole(userId, "Admin");
 
             //Adding Moderator
-            if (!context.Users.Any(u => u.Email == "moderator@email.com"))
+            if (!context.Users.Any(u => u.Email == "moderator@coderfoundry.com"))
             {
                 userManager.Create(new ApplicationUser
                 {
-                    UserName = "moderator@email.com",
-                    Email = "moderator@email.com",
-                    FirstName = "Dj",
-                    LastName = "Marque",
-                    DisplayName = "Drum and Bass"
+                    UserName = "moderator@coderfoundry.com",
+                    Email = "moderator@coderfoundry.com",
+                    FirstName = "CF",
+                    LastName = "Moderator",
+                    DisplayName = "CFMOD"
                 }, "Abc&123!");
             }
 
-            userId = userManager.FindByEmail("moderator@email.com").Id;
+            userId = userManager.FindByEmail("moderator@coderfoundry.com").Id;
             userManager.AddToRole(userId, "Moderator");
 
         }
