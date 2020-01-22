@@ -37,7 +37,13 @@
                 <div class="col-md-4">
                     <div class="card card-blog">
                         <div class="card-img">
-                            <a href="@Url.Action("Details", "BlogPosts",new { Slug = item.Slug })"> <img src="@item.MediaUrl" alt="" class="img-fluid"></a>
+                            <a href="@Url.Action("Details", "BlogPosts",new { Slug = item.Slug })"></a>
+                               
+                                @if (item.MediaUrl != null)
+                                {
+                                    <img src="@item.MediaUrl" alt="" class="img-fluid" alt="" />
+
+                                }
                         </div>
                         <div class="card-body">
                             @*<div class="card-category-box">

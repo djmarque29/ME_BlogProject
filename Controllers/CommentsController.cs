@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ME_BlogProject.Models;
+using Microsoft.AspNet.Identity;
 
 namespace ME_BlogProject.Controllers
 {
@@ -17,7 +18,7 @@ namespace ME_BlogProject.Controllers
         // GET: Comments
         public ActionResult Index()
         {
-            var comments = db.Comments.Include(c => c.Author);
+            var comments = db.Comments.Include(c => c.Author).Include(c => c.Post);
             return View(comments.ToList());
         }
 
@@ -40,24 +41,32 @@ namespace ME_BlogProject.Controllers
         public ActionResult Create()
         {
             ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName");
+            ViewBag.PostId = new SelectList(db.Posts, "Id", "Title");
             return View();
         }
 
         // POST: Comments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,PostId,AuthorId,Body,Created,Updated,UpdateReason")] Comment comment)
+        public ActionResult Create([Bind(Include = "Id,PostId,AuthorId,Body,Created,Updated,UpdateReason")] Comment comment, int blogId)
         {
             if (ModelState.IsValid)
             {
+                comment.PostId = blogId;
+                comment.Created = DateTimeOffset.Now;
+                comment.AuthorId = User.Identity.GetUserId();
+
                 db.Comments.Add(comment);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                var slug = db.Posts.FirstOrDefault(a => a.Id == blogId).Slug;
+                return RedirectToAction("Details", "BlogPosts", new { Slug = slug});
             }
 
             ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName", comment.AuthorId);
+            ViewBag.PostId = new SelectList(db.Posts, "Id", "Title", comment.PostId);
             return View(comment);
         }
 
@@ -74,6 +83,7 @@ namespace ME_BlogProject.Controllers
                 return HttpNotFound();
             }
             ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName", comment.AuthorId);
+            ViewBag.PostId = new SelectList(db.Posts, "Id", "Title", comment.PostId);
             return View(comment);
         }
 
@@ -91,6 +101,7 @@ namespace ME_BlogProject.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName", comment.AuthorId);
+            ViewBag.PostId = new SelectList(db.Posts, "Id", "Title", comment.PostId);
             return View(comment);
         }
 
