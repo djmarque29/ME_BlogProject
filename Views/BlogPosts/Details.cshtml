@@ -1,5 +1,12 @@
 ﻿@using Microsoft.AspNet.Identity
 @model ME_BlogProject.Models.BlogPost
+@using ME_BlogProject.Models
+@{
+    var db = new ApplicationDbContext();
+    var userId = User.Identity.GetUserId();
+    var user = db.Users.Find(userId);
+}
+
 
 <!--/ Section Blog-Single Star /-->
 <section class="blog-wrapper sect-pt4" id="blog">
@@ -16,13 +23,15 @@
                         }
                     </div>
 
-
                     <div class="post-meta">
                         <h1 class="article-title">@Model.Title</h1>
                         <ul>
                             <li>
                                 <span class="ion-ios-person"></span>
-                                <a href="#">@User.Identity.GetUserId()</a>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                <a href="#">@Html.Id(user.DisplayName)</a>
+                                }
                             </li>
                             <li>
                                 <span class="ion-pricetag"></span>
@@ -36,18 +45,8 @@
                     </div>
                     <div class="article-content">
                         <p>@Html.Raw(Model.Body) </p>
-
-
-                        @*<blockquote class="blockquote">
-                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                            </blockquote>
-                            <p>
-                                Nulla porttitor accumsan tincidunt. Cras ultricies ligula sed magna dictum porta. Mauris blandit
-                                aliquet elit, eget tincidunt
-                                nibh pulvinar a. Cras ultricies ligula sed magna dictum porta. Lorem ipsum dolor sit amet,
-                                consectetur adipiscing elit. Donec sollicitudin molestie malesuada.
-                            </p>*@
                     </div>
+
                     @if (User.IsInRole("Admin"))
                     {
                         <div class="row">
@@ -81,61 +80,11 @@
                             </li>
                         }
 
-
-                        @*<li>
-                                    <div class="comment-avatar">
-                                        <img src="~/Template/img/testimonial-4.jpg" alt="">
-                                    </div>
-                                    <div class="comment-details">
-                                        <h4 class="comment-author">Carmen Vegas</h4>
-                                        <span>18 Sep 2017</span>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores reprehenderit, provident cumque
-                                            ipsam temporibus maiores
-                                            quae natus libero optio, at qui beatae ducimus placeat debitis voluptates amet corporis,
-                                            veritatis deserunt.
-                                        </p>
-                                        <a href="3">Reply</a>
-                                    </div>
-                                </li>
-                                <li class="comment-children">
-                                    <div class="comment-avatar">
-                                        <img src="~/Template/img/testimonial-2.jpg" alt="">
-                                    </div>
-                                    <div class="comment-details">
-                                        <h4 class="comment-author">Oliver Colmenares</h4>
-                                        <span>18 Sep 2017</span>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores reprehenderit, provident cumque
-                                            ipsam temporibus maiores
-                                            quae.
-                                        </p>
-                                        <a href="3">Reply</a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="comment-avatar">
-                                        <img src="~/Template/img/testimonial-2.jpg" alt="">
-                                    </div>
-                                    <div class="comment-details">
-                                        <h4 class="comment-author">Oliver Colmenares</h4>
-                                        <span>18 Sep 2017</span>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores reprehenderit, provident cumque
-                                            ipsam temporibus maiores
-                                            quae natus libero optio.
-                                        </p>
-                                        <a href="3">Reply</a>
-                                    </div>
-                                </li>
-                            </ul>*@
+                    </ul>
                 </div>
-
-
-
                 @if (User.Identity.IsAuthenticated)
                 {
-                    using (Html.BeginForm("Create", "Comments",new { blogId = Model.Id }, FormMethod.Post))
+                    using (Html.BeginForm("Create", "Comments", new { blogId = Model.Id }, FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
                         @Html.Hidden("PostId", Model.Id)
@@ -180,33 +129,48 @@
                 }
                 else
                 {
-                    < p > @Html.ActionLink("Please Login To Leave a Comment", "Login", "Account", new { returnUrl = Url.Action("Details", "BlogPosts", new { Slug = Model.Slug }) }, new { @class = "btn btn-lg btn btn-primary" }) </ p >
+                   <p>< @Html.ActionLink("Please Login To Leave a Comment", "Login", "Account", new { returnUrl = Url.Action("Details", "BlogPosts", new { Slug = Model.Slug }) }, new { @class = "btn btn-lg btn btn-primary" }) </p>
                 }
+
             </div>
+            @*</div>
+
+                    </div>
+                </section>
+
+                <section>*@
             <div class="col-md-4">
                 <div class="widget-sidebar sidebar-search">
                     <h5 class="sidebar-title">Search</h5>
                     <div class="sidebar-content">
-                        <form>
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search for..." aria-label="Search for...">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-secondary btn-search" type="button">
-                                        <span class="ion-android-search"></span>
-                                    </button>
-                                </span>
-                            </div>
-                        </form>
+                            @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Get, htmlAttributes: new { @class = "form" }))
+                            {
+                                <div class="input-group">
+                                    <input id="searchStr" name="searchStr" type="text" class="form-control" placeholder="Search for..." aria-label="Search for...">
+                                    <span class="input-group-btn">
+                                        <button id="searchStr" name="searchStr" class="btn btn-secondary btn-search" type="submit">
+                                            <span class="ion-android-search"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            }
                     </div>
                 </div>
                 <div class="widget-sidebar">
                     <h5 class="sidebar-title">Recent Post</h5>
                     <div class="sidebar-content">
                         <ul class="list-sidebar">
+                            
+                            
                             <li>
-                                <a href="#"> Atque placeat maiores.</a>
+                                    @foreach(var item in ViewBag.RecentPost)
+                                    {
+                                <a href="@Url.Action("Details", "BlogPosts", new { Slug = item.Slug})">
+                                        <p>@item.Title</p>
+                                </a>
+                                    }
                             </li>
-                            <li>
+                            @*<li>
                                 <a href="#"> Lorem ipsum dolor sit amet consectetur</a>
                             </li>
                             <li>
@@ -217,7 +181,7 @@
                             </li>
                             <li>
                                 <a href="#"> Nam quo autem exercitationem.</a>
-                            </li>
+                            </li>*@
                         </ul>
                     </div>
                 </div>
@@ -249,18 +213,22 @@
                         <ul>
                             <li>
                                 <a href="#">
-                                    Web.</ a >
-                                    </ li >
-                                    < li >
-                                    < a href="#">Design.
+                                    Web.
                                 </a>
                             </li>
                             <li>
                                 <a href="#">
-                                    Travel.</ a >
-                                    </ li >
-                                    < li >
-                                    < a href="#">Photoshop
+                                    Design.
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    Travel.
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    Photoshop
                                 </a>
                             </li>
                             <li>
@@ -268,111 +236,113 @@
                             </li>
                             <li>
                                 <a href="#">
-                                    JavaScript </ a >
-                                    </ li >
-                                    </ ul >
-                                    </ div >
-                                    </ div >
-                                    </ div >
-                                    </ div >
-                                    </ div >
-                                    </ section >
-                                    < !--/ Section Blog-Single End /-->
-                                    <!--/ Section Contact-Footer Star /-->
-                                    <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url(img/overlay-bg.jpg)">
-                                        <div class="overlay-mf"></div>
-                                        <footer>
-                                            <div class="container">
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <div class="copyright-box">
-                                                            <p class="copyright">&copy; Copyright<strong> DevFolio</strong>. All Rights Reserved</p>
-                                                            <div class="credits">
-                                                                <!--
-                                                                  All the links in the footer should remain intact.
-                                                                  You can delete the links only if you purchased the pro version.
-                                                                  Licensing information: https://bootstrapmade.com/license/
-                                                                  Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=DevFolio
-                                                                -->
-                                                                Designed by<a href="https://bootstrapmade.com/">
-                                                                    BootstrapMade </ a >
-                                                                    </ div >
-                                                                    </ div >
-                                                                    </ div >
-                                                                    </ div >
-                                                                    </ div >
-                                                                    </ footer >
-                                                                    </ section >
-                                                                    < !--/ Section Contact-footer End /-->
-                                                                    @*@{
-                                                                            ViewBag.Title = "Details";
-                                                                        }
+                                    JavaScript
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--/ Section Blog-Single End /-->
+<!--/ Section Contact-Footer Star /-->
+<section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url(img/overlay-bg.jpg)">
+    <div class="overlay-mf"></div>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="copyright-box">
+                        <p class="copyright">&copy; Copyright<strong> DevFolio</strong>. All Rights Reserved</p>
+                        <div class="credits">
+                            <!--
+                              All the links in the footer should remain intact.
+                              You can delete the links only if you purchased the pro version.
+                              Licensing information: https://bootstrapmade.com/license/
+                              Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=DevFolio
+                            -->
+                            Designed by<a href="https://bootstrapmade.com/">
+                                BootstrapMade
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</section>
+<!--/ Section Contact-footer End /-->
+@*@{
+        ViewBag.Title = "Details";
+    }
 
-                                                                        <h2>Details</h2>
+    <h2>Details</h2>
 
-                                                                        <div>
-                                                                            <h4>BlogPost</h4>
-                                                                            <hr />
-                                                                            <dl class="dl-horizontal">
-                                                                                <dt>
-                                                                                    @Html.DisplayNameFor(model => model.Created)
-                                                                                </dt>
+    <div>
+        <h4>BlogPost</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Created)
+            </dt>
 
-                                                                                <dd>
-                                                                                    @Html.DisplayFor(model => model.Created)
-                                                                                </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Created)
+            </dd>
 
-                                                                                <dt>
-                                                                                    @Html.DisplayNameFor(model => model.Updated)
-                                                                                </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Updated)
+            </dt>
 
-                                                                                <dd>
-                                                                                    @Html.DisplayFor(model => model.Updated)
-                                                                                </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Updated)
+            </dd>
 
-                                                                                <dt>
-                                                                                    @Html.DisplayNameFor(model => model.Title)
-                                                                                </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Title)
+            </dt>
 
-                                                                                <dd>
-                                                                                    @Html.DisplayFor(model => model.Title)
-                                                                                </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Title)
+            </dd>
 
-                                                                                <dt>
-                                                                                    @Html.DisplayNameFor(model => model.Slug)
-                                                                                </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Slug)
+            </dt>
 
-                                                                                <dd>
-                                                                                    @Html.DisplayFor(model => model.Slug)
-                                                                                </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Slug)
+            </dd>
 
-                                                                                <dt>
-                                                                                    @Html.DisplayNameFor(model => model.Body)
-                                                                                </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Body)
+            </dt>
 
-                                                                                <dd>
-                                                                                    @Html.Raw(Model.Body)
-                                                                                </dd>
+            <dd>
+                @Html.Raw(Model.Body)
+            </dd>
 
-                                                                                <dt>
-                                                                                    @Html.DisplayNameFor(model => model.MediaUrl)
-                                                                                </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.MediaUrl)
+            </dt>
 
-                                                                                <dd>
-                                                                                    @Html.DisplayFor(model => model.MediaUrl)
-                                                                                </dd>
+            <dd>
+                @Html.DisplayFor(model => model.MediaUrl)
+            </dd>
 
-                                                                                <dt>
-                                                                                    @Html.DisplayNameFor(model => model.Published)
-                                                                                </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Published)
+            </dt>
 
-                                                                                <dd>
-                                                                                    @Html.DisplayFor(model => model.Published)
-                                                                                </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Published)
+            </dd>
 
-                                                                            </dl>
-                                                                        </div>
-                                                                        <p>
-                                                                            @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-                                                                            @Html.ActionLink("Back to List", "Index")
-                                                                        </p>*@
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>*@

@@ -40,8 +40,8 @@ namespace ME_BlogProject.Controllers
                 {
                     var body = "<p> Email From: <bold>{0}</bold>" +
                                "({1})</p><p> Message:</p><p>{2}</p>";
-                    model.Body = "This is a message from your blog site. The name and" +
-                                 "the email of the contacting person is above.";
+                    //model.Body = "This is a message from your blog site. The name and" +
+                    //             "the email of the contacting person is above.";
 
                     var svc = new EmailService();
                     var msg = new IdentityMessage()
@@ -49,7 +49,7 @@ namespace ME_BlogProject.Controllers
                         Subject = "Contact From Portfolio Site",
                         Body = string.Format(body, model.FromName, model.FromEmail,
                                             model.Body),
-                        Destination = "personal@email.com" //ADD YOUR PERSONAL EMAIL ADDRESS HERE!
+                        Destination = "ellis.marc22@gmail.com" //ADD YOUR PERSONAL EMAIL ADDRESS HERE!
                     };
 
                     await svc.SendAsync(msg);

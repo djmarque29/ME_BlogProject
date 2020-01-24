@@ -1,19 +1,47 @@
 ﻿@using Microsoft.AspNet.Identity
-@model IEnumerable<ME_BlogProject.Models.BlogPost>
+@model IPagedList<ME_BlogProject.Models.BlogPost>
+@using ME_BlogProject.Models
+@using PagedList
+@using PagedList.Mvc
+
+
+@{
+    var db = new ApplicationDbContext();
+    var userId = User.Identity.GetUserId();
+    var user = db.Users.Find(userId);
+}
 
 
 <!--/ Section Blog Star /-->
-
-@if (User.IsInRole("Admin"))
-{
+<br />
+<br />
+<hr />
+<div class="container">
     <div class="row">
-        <div class="container">
-            <p></p>
-            @*<div class="btn btn-primary">Create Blog Post</div>*@
-            <a href="@Url.Action("Create", "BlogPosts")"><div class="btn btn-primary">Create Blog Post</div></a>
+        <div class="col-md-9">
+            @if (User.IsInRole("Admin"))
+            {
+                @*<div class="container">*@
+                    <p></p>
+                    <a href="@Url.Action("Create", "BlogPosts")"><div class="btn btn-primary align-top">Create Blog Post</div></a>
+                @*</div>*@
+            }
+        </div>
+        <div class="col-md-3">
+            @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Get, htmlAttributes: new { @class = "form" }))
+            {
+                @*<div class="container">*@
+                    <div class="controls controls-row search-row">
+                        <input id="searchStr" name="searchStr" class="input-group-sm" type="text" placeholder="Search" />
+                        <button id="searchStr" name="searchStr" class="btn btn-outline-primary fa fa-search" type="submit">
+                        </button>
+
+                    </div>
+                @*</div>*@
+            }
         </div>
     </div>
-}
+</div>
 
 <section id="blog" class="blog-mf sect-pt4 route">
     <div class="container">
@@ -38,12 +66,12 @@
                     <div class="card card-blog">
                         <div class="card-img">
                             <a href="@Url.Action("Details", "BlogPosts",new { Slug = item.Slug })"></a>
-                               
-                                @if (item.MediaUrl != null)
-                                {
-                                    <img src="@item.MediaUrl" alt="" class="img-fluid" alt="" />
 
-                                }
+                            @if (item.MediaUrl != null)
+                            {
+                                <img src="@item.MediaUrl" alt="" class="img-fluid" alt="" />
+
+                            }
                         </div>
                         <div class="card-body">
                             @*<div class="card-category-box">
@@ -58,7 +86,7 @@
                             <div class="post-author">
                                 <a href="#">
                                     <img src="~/Template/img/testimonial-2.jpg" alt="" class="avatar rounded-circle">
-                                    <span class="author">@User.Identity.GetUserId()</span>
+                                    <span class="author">Marc Ellis</span>
                                 </a>
                             </div>
                             <div class="post-date">
@@ -101,39 +129,15 @@
                     </div>
                 </div>
             </div>*@
-        <!--/ Blog 3/-->
-        @*<div class="col-md-4">
-                <div class="card card-blog">
-                    <div class="card-img">
-                        <a href="blog-single.html"><img src="img/post-3.jpg" alt="" class="img-fluid"></a>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-category-box">
-                            <div class="card-category">
-                                <h6 class="category">Web Design</h6>
-                            </div>
-                        </div>
-                        <h3 class="card-title"><a href="blog-single.html">See more ideas about Travel</a></h3>
-                        <p class="card-description">
-                            Proin eget tortor risus. Pellentesque in ipsum id orci porta dapibus. Praesent sapien massa, convallis
-                            a pellentesque nec,
-                            egestas non nisi.
-                        </p>
-                    </div>
-                    <div class="card-footer">
-                        <div class="post-author">
-                            <a href="#">
-                                <img src="img/testimonial-2.jpg" alt="" class="avatar rounded-circle">
-                                <span class="author">Morgan Freeman</span>
-                            </a>
-                        </div>
-                        <div class="post-date">
-                            <span class="ion-ios-clock-outline"></span> 10 min
-                        </div>
-                    </div>
-                </div>
-            </div>*@
-        @*</div>*@
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 offset-10">
+                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchStr = ViewBag.Search }))
+            </div>
+        </div>
     </div>
 </section>
 <!--/ Section Blog End /-->

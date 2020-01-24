@@ -9,6 +9,9 @@ using System.Web;
 using System.Web.Mvc;
 using ME_BlogProject.Helpers;
 using ME_BlogProject.Models;
+using PagedList;
+using PagedList.Mvc;
+
 
 namespace ME_BlogProject.Controllers
 {
@@ -17,10 +20,42 @@ namespace ME_BlogProject.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: BlogPosts
-        public ActionResult Index()
+        public ActionResult Index(int? page, string searchStr)
         {
-            return View(db.Posts.ToList());
+            ViewBag.Search = searchStr;
+            var blogList = IndexSearch(searchStr);
+
+            int pageSize = 3; //the number of posts you want to display per page
+            int pageNumber = (page ?? 1);
+
+            var listposts = db.Posts.AsQueryable();
+            return View(blogList.ToPagedList(pageNumber, pageSize));
         }
+
+        // POST: BlogPosts
+
+            public IQueryable<BlogPost> IndexSearch(string searchStr)
+        {
+            IQueryable<BlogPost> result = null;
+            if (searchStr !=null)
+            {
+                result = db.Posts.AsQueryable();
+                result = result.Where(p => p.Title.Contains(searchStr) ||
+                                p.Body.Contains(searchStr) ||
+                                p.Comments.Any(c => c.Body.Contains(searchStr) ||
+                                               c.Author.FirstName.Contains(searchStr) ||
+                                               c.Author.LastName.Contains(searchStr) ||
+                                               c.Author.DisplayName.Contains(searchStr) ||
+                                               c.Author.Email.Contains(searchStr)));
+            } 
+            else
+            {
+                result = db.Posts.AsQueryable();
+            }
+
+            return result.OrderByDescending(p => p.Created);
+        }
+
 
         // GET: BlogPosts/Details/Slug
         public ActionResult Details(string Slug)
@@ -34,6 +69,8 @@ namespace ME_BlogProject.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.RecentPost = db.Posts.OrderByDescending(b => b.Created).Take(5).ToList();
+
             return View(blogPost);
         }
 
@@ -103,7 +140,7 @@ namespace ME_BlogProject.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Created,Updated,Title,Slug,Body,MediaUrl,Published")] BlogPost blogPost, HttpPostedFileBase image)
+        public ActionResult Edit([Bind(Include = "Id,Created,Title,Slug,Body,MediaUrl,Published")] BlogPost blogPost, HttpPostedFileBase image)
         {
             if (ModelState.IsValid)
             {
@@ -113,6 +150,8 @@ namespace ME_BlogProject.Controllers
                     image.SaveAs(Path.Combine(Server.MapPath("~/Uploads/"), fileName));
                     blogPost.MediaUrl = "/Uploads/" + fileName;
                 }
+
+                blogPost.Updated = DateTimeOffset.Now;
                 db.Entry(blogPost).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

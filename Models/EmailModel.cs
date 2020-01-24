@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace ME_BlogProject.Models
 {
@@ -13,6 +14,7 @@ namespace ME_BlogProject.Models
         [Required, Display(Name = "Email"), EmailAddress]
         public string FromEmail { get; set; }
         public string Subject { get; set; }
+        [AllowHtml]
         public string Body { get; set; }
     }
 }
