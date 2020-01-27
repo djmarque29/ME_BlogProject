@@ -16,6 +16,7 @@ namespace ME_BlogProject.Models
         public string LastName { get; set; }
         public string DisplayName { get; set; }
 
+        public string Avatar { get; set; }
         public ApplicationUser()
         {
             this.BlogComments = new HashSet<Comment>();

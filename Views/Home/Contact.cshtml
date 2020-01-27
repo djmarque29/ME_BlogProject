@@ -1,6 +1,6 @@
 ﻿@model ME_BlogProject.Models.EmailModel
 
-<div class="container">
+@*<div class="container">
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
@@ -26,7 +26,7 @@
             <div class="col-md-10">
                 <input id="editor" name="Body" />
 
-                @*@Html.TextAreaFor(model => model.Body, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.TextAreaFor(model => model.Body, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
 
             </div>
@@ -39,7 +39,7 @@
             </div>
         </div>
     }
-</div>
+</div>*@
 
 
 
@@ -49,10 +49,10 @@
 @{
     ViewBag.Title = "Contact";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+@*<h2>@ViewBag.Title.</h2>*@
+@*<h3>@ViewBag.Message</h3>*@
 <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url(../Template/img/overlay-bg.jpg)">
-    <div class="overlay-mf"></div>
+    @*<div class="overlay-mf"></div>*@
     <div class="container">
         @using (Html.BeginForm())
         {
@@ -69,16 +69,14 @@
                                         </h5>
                                     </div>
                                     <div>
-                                        <form action="" method="post" role="form" class="contactForm">
+                                        <form action="@Url.Action("Contact" , "Home")" method="post" role="form" class="contactForm">
                                             <div id="sendmessage">Your message has been sent. Thank you!</div>
                                             <div id="errormessage"></div>
                                             @Html.ValidationSummary("", new { @class = "text-danger" })
                                             <div class="row">
                                                 <div class="col-md-12 mb-3">
                                                     <div class="form-group">
-                                                        @Html.LabelFor(m => m.FromName, new { @class = "col-md-2 control-label" })
-                                                        <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
-                                                        @Html.TextBoxFor(m => m.FromName, new { @class = "form-control" })
+                                                        <input type="text" name="FromName" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
                                                         @Html.ValidationMessageFor(m => m.FromName)
 
                                                         <div class="validation"></div>
@@ -86,20 +84,20 @@
                                                 </div>
                                                 <div class="col-md-12 mb-3">
                                                     <div class="form-group">
-                                                        <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
+                                                        <input type="email" class="form-control" name="FromEmail" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
+                                                        @Html.ValidationMessageFor(m => m.FromEmail)
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mb-3">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control" name="Subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
                                                         <div class="validation"></div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12 mb-3">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
-                                                        <div class="validation"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12 mb-3">
-                                                    <div class="form-group">
-                                                        <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
-                                                        <div class="validation"></div>
+                                                        <textarea class="form-control" name="Body" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
+                                                        @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
@@ -124,16 +122,16 @@
                                         </p>
                                         <ul class="list-ico">
                                             <li><span class="ion-ios-location"></span> Winston-Salem, NC</li>
-                                            <li><span class="ion-ios-telephone"></span> (617) 557-0089</li>
+                                            @*<li><span class="ion-ios-telephone"></span> (617) 557-0089</li>*@
                                             <li><span class="ion-email"></span> Ellis.Marc22@gmail.com</li>
                                         </ul>
                                     </div>
                                     <div class="socials">
                                         <ul>
-                                            <li><a href=""><span class="ico-circle"><i class="ion-social-facebook"></i></span></a></li>
-                                            <li><a href=""><span class="ico-circle"><i class="ion-social-instagram"></i></span></a></li>
-                                            <li><a href=""><span class="ico-circle"><i class="ion-social-twitter"></i></span></a></li>
-                                            <li><a href=""><span class="ico-circle"><i class="ion-social-pinterest"></i></span></a></li>
+                                            <li><a href="https://www.linkedin.com/in/marc-ellis-a3b943196/"><span class="ico-circle"><i class="ion-social-linkedin"></i></span></a></li>
+                                            <li><a href="https://www.instagram.com/5littlebirdswoodworking/"><span class="ico-circle"><i class="ion-social-instagram"></i></span></a></li>
+                                            <li><a href="https://github.com/djmarque29?tab=repositories"><span class="ico-circle"><i class="ion-social-github"></i></span></a></li>
+                                            @*<li><a href="https://github.com/djmarque29?tab=repositories"><span class="ico-circle"><i class="ion-social-pinterest"></i></span></a></li>*@
                                         </ul>
                                     </div>
                                 </div>

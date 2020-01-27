@@ -18,7 +18,7 @@
                         @*<img src="" class="img-fluid" alt="">*@
                         @if (Model.MediaUrl != null)
                         {
-                            <img src="@Model.MediaUrl" alt="" class="img-fluid" alt="" />
+                            <img src="@Model.MediaUrl" alt="" class="img-fluid" />
 
                         }
                     </div>
@@ -30,16 +30,16 @@
                                 <span class="ion-ios-person"></span>
                                 @if (User.Identity.IsAuthenticated)
                                 {
-                                <a href="#">@Html.Id(user.DisplayName)</a>
+                                    <a href="#">@Html.Id(user.DisplayName)</a>
                                 }
                             </li>
                             <li>
                                 <span class="ion-pricetag"></span>
-                                <a href="#">Web Design</a>
+                                <a href="#">Full Stack Developer</a>
                             </li>
                             <li>
                                 <span class="ion-chatbox"></span>
-                                <a href="#">14</a>
+                                <a href="#">@Model.Comments.Count</a>
                             </li>
                         </ul>
                     </div>
@@ -47,7 +47,7 @@
                         <p>@Html.Raw(Model.Body) </p>
                     </div>
 
-                    @if (User.IsInRole("Admin"))
+                    @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
                     {
                         <div class="row">
                             <div class="col-md-8">
@@ -67,7 +67,7 @@
                         {
                             <li>
                                 <div class="comment-avatar">
-                                    <img src="~/Template/img/testimonial-2.jpg" alt="">
+                                    <img src="@item.Author.Avatar">
                                 </div>
                                 <div class="comment-details">
                                     <h4 class="comment-author">@item.Author.DisplayName</h4>
@@ -75,11 +75,19 @@
                                     <p>
                                         @item.Body;
                                     </p>
-                                    @*<a href="3">Reply</a>*@
+
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                                    {
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <a href="@Url.Action("Edit", "Comments", new { @item.Id })"><div class="btn btn-primary">Edit</div></a>
+                                                <a href="@Url.Action("Delete", "Comments", new { @item.Id })"><div class="btn btn-primary">Delete</div></a>
+                                            </div>
+                                        </div>
+                                    }
                                 </div>
                             </li>
                         }
-
                     </ul>
                 </div>
                 @if (User.Identity.IsAuthenticated)
@@ -129,7 +137,7 @@
                 }
                 else
                 {
-                   <p>< @Html.ActionLink("Please Login To Leave a Comment", "Login", "Account", new { returnUrl = Url.Action("Details", "BlogPosts", new { Slug = Model.Slug }) }, new { @class = "btn btn-lg btn btn-primary" }) </p>
+                    <p>@Html.ActionLink("Please Login To Leave a Comment", "Login", "Account", new { returnUrl = Url.Action("Details", "BlogPosts", new { Slug = Model.Slug }) }, new { @class = "btn btn-lg btn btn-primary" }) </p>
                 }
 
             </div>
@@ -143,105 +151,106 @@
                 <div class="widget-sidebar sidebar-search">
                     <h5 class="sidebar-title">Search</h5>
                     <div class="sidebar-content">
-                            @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Get, htmlAttributes: new { @class = "form" }))
-                            {
-                                <div class="input-group">
-                                    <input id="searchStr" name="searchStr" type="text" class="form-control" placeholder="Search for..." aria-label="Search for...">
-                                    <span class="input-group-btn">
-                                        <button id="searchStr" name="searchStr" class="btn btn-secondary btn-search" type="submit">
-                                            <span class="ion-android-search"></span>
-                                        </button>
-                                    </span>
-                                </div>
-                            }
+                        @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Get, htmlAttributes: new { @class = "form" }))
+                        {
+                            <div class="input-group">
+                                <input id="searchStr" name="searchStr" type="text" class="form-control" placeholder="Search for..." aria-label="Search for...">
+                                <span class="input-group-btn">
+                                    <button id="searchStr" name="searchStr" class="btn btn-secondary btn-search" type="submit">
+                                        <span class="ion-android-search"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        }
                     </div>
                 </div>
                 <div class="widget-sidebar">
                     <h5 class="sidebar-title">Recent Post</h5>
                     <div class="sidebar-content">
                         <ul class="list-sidebar">
-                            
-                            
+
+
                             <li>
-                                    @foreach(var item in ViewBag.RecentPost)
-                                    {
-                                <a href="@Url.Action("Details", "BlogPosts", new { Slug = item.Slug})">
+                                @foreach (var item in ViewBag.RecentPost)
+                                {
+                                    <a href="@Url.Action("Details", "BlogPosts", new { Slug = item.Slug})">
                                         <p>@item.Title</p>
-                                </a>
-                                    }
+                                    </a>
+                                }
                             </li>
+
                             @*<li>
-                                <a href="#"> Lorem ipsum dolor sit amet consectetur</a>
-                            </li>
-                            <li>
-                                <a href="#"> Nam quo autem exercitationem.</a>
-                            </li>
-                            <li>
-                                <a href="#"> Atque placeat maiores nam quo autem</a>
-                            </li>
-                            <li>
-                                <a href="#"> Nam quo autem exercitationem.</a>
-                            </li>*@
+                                    <a href="#"> Lorem ipsum dolor sit amet consectetur</a>
+                                </li>
+                                <li>
+                                    <a href="#"> Nam quo autem exercitationem.</a>
+                                </li>
+                                <li>
+                                    <a href="#"> Atque placeat maiores nam quo autem</a>
+                                </li>
+                                <li>
+                                    <a href="#"> Nam quo autem exercitationem.</a>
+                                </li>*@
                         </ul>
                     </div>
                 </div>
-                <div class="widget-sidebar">
-                    <h5 class="sidebar-title">Archives</h5>
-                    <div class="sidebar-content">
-                        <ul class="list-sidebar">
-                            <li>
-                                <a href="#"> September, 2017.</a>
-                            </li>
-                            <li>
-                                <a href="#"> April, 2017.</a>
-                            </li>
-                            <li>
-                                <a href="#"> Nam quo autem exercitationem.</a>
-                            </li>
-                            <li>
-                                <a href="#"> Atque placeat maiores nam quo autem</a>
-                            </li>
-                            <li>
-                                <a href="#"> Nam quo autem exercitationem.</a>
-                            </li>
-                        </ul>
+                @*<div class="widget-sidebar">
+                        <h5 class="sidebar-title">Archives</h5>
+                        <div class="sidebar-content">
+                            <ul class="list-sidebar">
+                                <li>
+                                    <a href="#"> September, 2017.</a>
+                                </li>
+                                <li>
+                                    <a href="#"> April, 2017.</a>
+                                </li>
+                                <li>
+                                    <a href="#"> Nam quo autem exercitationem.</a>
+                                </li>
+                                <li>
+                                    <a href="#"> Atque placeat maiores nam quo autem</a>
+                                </li>
+                                <li>
+                                    <a href="#"> Nam quo autem exercitationem.</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                <div class="widget-sidebar widget-tags">
-                    <h5 class="sidebar-title">Tags</h5>
-                    <div class="sidebar-content">
-                        <ul>
-                            <li>
-                                <a href="#">
-                                    Web.
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Design.
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Travel.
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Photoshop
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#"> Corel Draw</a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    JavaScript
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                    <div class="widget-sidebar widget-tags">
+                        <h5 class="sidebar-title">Tags</h5>
+                        <div class="sidebar-content">
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        Web.
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        Design.
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        Travel.
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        Photoshop
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#"> Corel Draw</a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        JavaScript
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>*@
             </div>
         </div>
     </div>

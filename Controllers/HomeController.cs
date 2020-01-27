@@ -9,8 +9,10 @@ using Microsoft.AspNet.Identity;
 
 namespace ME_BlogProject.Controllers
 {
+    [RequireHttps]
     public class HomeController : Controller
     {
+        
         public ActionResult Index()
         {
             return View();

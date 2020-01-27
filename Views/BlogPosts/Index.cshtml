@@ -69,17 +69,17 @@
 
                             @if (item.MediaUrl != null)
                             {
-                                <img src="@item.MediaUrl" alt="" class="img-fluid" alt="" />
+                                <img src="@item.MediaUrl" alt="" class="img-fluid"/>
 
                             }
                         </div>
                         <div class="card-body">
                             @*<div class="card-category-box">
                                     <div class="card-category">
-                                        <h6 class="category">Travel</h6>
+                                        <h6 class="category ion-chatbox">@item.Comments.Count</h6>
                                     </div>
                                 </div>*@
-                            <h3 class="card-title"><a href="@Url.Action("Details", "BlogPosts",new { Slug = item.Slug })">@item.Title</a></h3>
+                            <h3 class="card-title"><a href="@Url.Action("Details", "BlogPosts",new { Slug = item.Slug })">@item.Title</a></h3>@*<span class="ion-chatbox">@item.Comments.Count</span>*@
                             <p class="card-description">@Html.Raw(item.Body) </p>
                         </div>
                         <div class="card-footer">
@@ -89,6 +89,9 @@
                                     <span class="author">Marc Ellis</span>
                                 </a>
                             </div>
+                            <span class="ion-chatbox"></span>
+                            <a href="#">@item.Comments.Count</a>
+
                             <div class="post-date">
                                 <span class="ion-ios-clock-outline">@item.Created.ToString("MM/dd/yy")</span>
                             </div>

@@ -10,9 +10,11 @@ using ME_BlogProject.Models;
 
 namespace ME_BlogProject.Controllers
 {
+    [RequireHttps]
     [Authorize]
     public class ManageController : Controller
     {
+        
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 

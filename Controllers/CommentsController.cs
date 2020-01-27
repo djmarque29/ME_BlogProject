@@ -11,8 +11,10 @@ using Microsoft.AspNet.Identity;
 
 namespace ME_BlogProject.Controllers
 {
+    [RequireHttps]
     public class CommentsController : Controller
     {
+        
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Comments

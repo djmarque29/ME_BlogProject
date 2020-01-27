@@ -1,6 +1,12 @@
 ﻿@using Microsoft.AspNet.Identity
+@using ME_BlogProject.Models
 @if (Request.IsAuthenticated)
 {
+    var userId = User.Identity.GetUserId();
+    var db = new ApplicationDbContext();
+    var user = db.Users.Find(userId);
+    
+    
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
     @Html.AntiForgeryToken()
@@ -8,7 +14,7 @@
     @*<ul class="nav navbar-nav navbar-right">*@
         <li class="nav-item">
 
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new {@class="nav-link js-scroll", title = "Manage" })
+            @Html.ActionLink("Hello " + user.DisplayName + "!", "Index", "Manage", routeValues: null, htmlAttributes: new {@class="nav-link js-scroll", title = "Manage" })
         </li>
         <li><a class="nav-link js-scroll" href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
     @*</ul>*@
