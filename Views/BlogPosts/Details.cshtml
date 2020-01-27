@@ -71,7 +71,16 @@
                                 </div>
                                 <div class="comment-details">
                                     <h4 class="comment-author">@item.Author.DisplayName</h4>
-                                    <span>@item.Created</span>
+                                    <span>@item.Created
+                                        @if (item.Updated == null)
+                                        {
+                                        item.Created.ToString();
+
+                                    } else
+                                    {
+                                        item.Updated.ToString();
+                                    }
+                                    </span>
                                     <p>
                                         @item.Body;
                                     </p>

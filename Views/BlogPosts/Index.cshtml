@@ -93,6 +93,16 @@
                             <a href="#">@item.Comments.Count</a>
 
                             <div class="post-date">
+                                @if (item.Updated == null)
+                                {
+                                    item.Created.ToString("MMM dd yyyy");
+
+                                }
+                                else
+                                {
+                                    item.Updated.ToString();
+                                }
+
                                 <span class="ion-ios-clock-outline">@item.Created.ToString("MM/dd/yy")</span>
                             </div>
                         </div>
